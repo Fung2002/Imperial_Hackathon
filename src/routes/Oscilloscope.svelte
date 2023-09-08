@@ -19,5 +19,5 @@
 	}
 </script>
 
-<p>Paused: {$paused}</p>
+<p>{$paused ? 'Paused' : 'Playing'}</p>
 <canvas class="w-full h-full" />

@@ -1,5 +1,6 @@
 <script>
 	import { onMount } from 'svelte';
+	import { paused } from '$lib/stores';
 
 	// https://davidmatthew.ie/creating-an-oscilloscope-with-javascript/
 	let audioCtx;
@@ -18,4 +19,5 @@
 	}
 </script>
 
-<canvas />
+<p>Paused: {$paused}</p>
+<canvas class="w-full h-full" />

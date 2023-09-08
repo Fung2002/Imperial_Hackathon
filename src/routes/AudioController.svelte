@@ -1,4 +1,5 @@
 <script>
+	import { paused } from '$lib/stores';
 	/**
 	 * @type {any}
 	 */
@@ -9,23 +10,23 @@
 	 */
 	let time;
 	let duration;
-	let paused = true;
+	$paused = true;
 </script>
 
 <audio
 	{src}
 	bind:currentTime={time}
 	bind:duration
-	bind:paused
+	bind:paused={$paused}
 	on:ended={() => {
 		time = 0;
 	}}
 />
 <button
 	class="btn btn-secondary hover:btn-accent rounded-full w-20 h-20 drop-shadow-md"
-	aria-label={paused ? 'play' : 'pause'}
+	aria-label={$paused ? 'play' : 'pause'}
 	on:click={() => {
-		paused = !paused;
+		$paused = !$paused;
 	}}
 />
 

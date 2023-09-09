@@ -9,6 +9,6 @@
 	</div>
 
 	<div class="controller fixed bottom-0 left-0 m-4">
-		<AudioController src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" />
+		<AudioController />
 	</div>
 </div>

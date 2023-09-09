@@ -27,12 +27,14 @@
 		canvasCtx.lineWidth = lineWidth;
 		canvasCtx.strokeStyle = $recording ? recordingStrokeStyle : pausedStrokeStyle;
 		resetCanvas();
+
+		// Stop listening if user pauses
 		if (!$recording) {
 			microphone.disconnect();
 			return;
 		}
 
-		// Waveform visualizer
+		// Start listening and draw the waveform
 		microphone.listen();
 		console.log(microphone);
 	}

@@ -1,12 +1,12 @@
 <script>
-	import { paused } from '$lib/stores';
+	import { recording } from '$lib/stores';
 </script>
 
 <button
 	class="btn btn-secondary hover:btn-accent rounded-full w-20 h-20 drop-shadow-md"
-	aria-label={$paused ? 'play' : 'pause'}
+	aria-label={$recording ? 'pause' : 'play'}
 	on:click={() => {
-		$paused = !$paused;
+		$recording = !$recording;
 	}}
 />
 

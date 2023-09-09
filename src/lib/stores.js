@@ -1,3 +1,3 @@
 import { writable } from 'svelte/store';
 
-export const paused = writable(true);
+export const recording = writable(false);

@@ -1,25 +1,17 @@
 <script>
 	import { onMount } from 'svelte';
-	import { paused } from '$lib/stores';
+	import { recording } from '$lib/stores';
+	import { Microphone } from '$lib/microphone';
 
-	// playback settings
-	const src = '/song.mp3';
-	let time;
-	let duration;
-
-	// visualizer settings
-	let canvas;
-	let canvasCtx;
-	let audio;
-	let analyser;
-	let audioContext;
-	let dataArray;
-
-	const playingStrokeStyle = '#2dd4bf';
+	const recordingStrokeStyle = '#2dd4bf';
 	const pausedStrokeStyle = '#374151';
 	const lineWidth = 4;
+	const microphone = new Microphone();
 
-	$: $paused, draw();
+	let canvas;
+	let canvasCtx;
+
+	$: $recording, draw();
 
 	function resetCanvas() {
 		canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
@@ -33,19 +25,16 @@
 		// Set canvas styling
 		if (!canvasCtx) return;
 		canvasCtx.lineWidth = lineWidth;
-		canvasCtx.strokeStyle = $paused ? pausedStrokeStyle : playingStrokeStyle;
+		canvasCtx.strokeStyle = $recording ? recordingStrokeStyle : pausedStrokeStyle;
 		resetCanvas();
-		if ($paused) return;
+		if (!$recording) {
+			microphone.disconnect();
+			return;
+		}
 
 		// Waveform visualizer
-		console.log('draw');
-		if (!audioContext) {
-			audioContext = new (window.AudioContext || window.webkitAudioContext)();
-		}
-
-		if (!analyser) {
-			analyser = audioContext.createAnalyser();
-		}
+		microphone.listen();
+		console.log(microphone);
 	}
 
 	onMount(() => {
@@ -66,15 +55,5 @@
 	});
 </script>
 
-<p>{$paused ? 'Paused' : 'Playing'}</p>
-<audio
-	{src}
-	bind:this={audio}
-	bind:currentTime={time}
-	bind:duration
-	bind:paused={$paused}
-	on:ended={() => {
-		time = 0;
-	}}
-/>
+<p>{$recording ? 'Recording' : 'Paused'}</p>
 <canvas bind:this={canvas} class="w-full h-full" />

@@ -34,13 +34,18 @@ export class Microphone {
 		this.initialized = false;
 	};
 
-	getSamples = () => {
+	getTimeDomainSamples = (amplify = 1) => {
 		this.analyser.getByteTimeDomainData(this.dataArray);
 		let normalizedSamples = [...this.dataArray].map((sample) => {
-			return sample / 128 - 1;
+			return (sample / 128 - 1) * amplify;
 		});
 		return normalizedSamples;
 	};
+
+    getFrequencyDomainSamples = (amplify = 1) => {
+        this.analyser.getByteFrequencyData(this.dataArray);
+        return this.dataArray;
+    }
 
 	getVolume = () => {
 		this.analyser.getByteTimeDomainData(this.dataArray);

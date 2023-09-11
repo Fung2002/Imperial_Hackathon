@@ -2,41 +2,56 @@
 	import { onMount } from 'svelte';
 	import { recording } from '$lib/stores';
 	import { Microphone } from '$lib/microphone';
+	import { Bar } from '$lib/bars';
 
 	const recordingStrokeStyle = '#2dd4bf';
 	const pausedStrokeStyle = '#374151';
-	const lineWidth = 4;
 	const microphone = new Microphone();
+	const numOfBars = microphone.fftSize / 2;
 
+	let bars = [];
 	let canvas;
 	let canvasCtx;
 
 	$: $recording, draw();
 
-	function resetCanvas() {
-		canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-		canvasCtx.beginPath();
-		canvasCtx.moveTo(0, canvas.height / 3);
-		canvasCtx.lineTo(canvas.width, canvas.height / 3);
-		canvasCtx.stroke();
-	}
-
 	function draw() {
 		// Set canvas styling
 		if (!canvasCtx) return;
-		canvasCtx.lineWidth = lineWidth;
 		canvasCtx.strokeStyle = $recording ? recordingStrokeStyle : pausedStrokeStyle;
-		resetCanvas();
 
 		// Stop listening if user pauses
 		if (!$recording) {
 			microphone.disconnect();
+			// show flat line
+			canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 			return;
 		}
 
 		// Start listening and draw the waveform
 		microphone.listen();
-		console.log(microphone);
+		animate();
+	}
+
+	function animate() {
+		if (microphone.initialized) {
+			canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+			const samples = microphone.getSamples();
+			bars.forEach((bar, i) => {
+				bar.update(samples[i] * 1000);
+				bar.draw(canvasCtx);
+			});
+		}
+
+		requestAnimationFrame(animate);
+	}
+
+	function createBars() {
+		bars = [];
+		const barWidth = canvas.width / numOfBars;
+		for (let i = 0; i < numOfBars; i++) {
+			bars.push(new Bar(i * barWidth, canvas.height / 2, 1, 20, recordingStrokeStyle));
+		}
 	}
 
 	onMount(() => {
@@ -45,8 +60,10 @@
 		function resize() {
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
-			draw();
+			createBars();
 		}
+
+		createBars();
 
 		window.addEventListener('resize', resize);
 		resize();

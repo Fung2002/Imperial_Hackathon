@@ -13,8 +13,7 @@ export class Microphone {
 				this.microphone = this.audioContext.createMediaStreamSource(stream);
 				this.analyser = this.audioContext.createAnalyser();
 				this.analyser.fftSize = this.fftSize;
-				const bufferLength = this.analyser.frequencyBinCount;
-				this.dataArray = new Uint8Array(bufferLength);
+				this.dataArray = new Uint8Array(this.analyser.frequencyBinCount);
 				this.microphone.connect(this.analyser);
 				this.initialized = true;
 			})
@@ -44,7 +43,9 @@ export class Microphone {
 
     getFrequencyDomainSamples = (amplify = 1) => {
         this.analyser.getByteFrequencyData(this.dataArray);
-        return this.dataArray;
+        return [...this.dataArray].map((sample) => {
+			return sample * amplify;
+		});
     }
 
 	getVolume = () => {

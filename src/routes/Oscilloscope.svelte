@@ -31,13 +31,15 @@
 	}
 
 	function animate() {
+		if (!canvasCtx) return;
+
 		canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
 		if (microphone.initialized) {
 			let samples;
 			if ($waveDomain === 'time') {
-				samples = microphone.getTimeDomainSamples(500);
+				samples = microphone.getTimeDomainSamples(1000);
 			} else {
-				samples = microphone.getFrequencyDomainSamples(1);
+				samples = microphone.getFrequencyDomainSamples(5);
 			}
 			bars.forEach((bar, i) => {
 				bar.update(samples[i]);
@@ -46,7 +48,6 @@
 		} else {
 			drawFlatLine();
 		}
-
 		requestAnimationFrame(animate);
 	}
 
@@ -62,7 +63,7 @@
 		bars = [];
 		const barWidth = canvas.width / numOfBars;
 		for (let i = 0; i < numOfBars; i++) {
-			bars.push(new Bar(i * barWidth, canvas.height / 2, 1, 20, recordingStrokeStyle));
+			bars.push(new Bar(i * barWidth, canvas.height / 2, barWidth, 20, recordingStrokeStyle));
 		}
 	}
 
@@ -89,5 +90,5 @@
 	});
 </script>
 
-<p>{$recording ? 'Recording' : 'Paused'}</p>
+<p>{$recording ? `Listening` : 'Paused'}</p>
 <canvas bind:this={canvas} class="w-full h-full" />

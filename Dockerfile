@@ -25,6 +25,6 @@ COPY --from=build /app/package.json .
 COPY --from=build /app/package-lock.json .
 RUN npm ci --omit dev
 
-EXPOSE 3000
+EXPOSE 8582
 ENTRYPOINT [ "/usr/bin/dumb-init" ]
 CMD ["node","/app/index.js"]

@@ -1,4 +1,4 @@
-name: Release
+name: Docker
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  docker-api:
-    name: Docker Image (API)
+  docker:
+    name: Docker Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

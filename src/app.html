@@ -1,14 +1,79 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="angst">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="description" content="Tiny app to show you the waveform for your voice" />
-		%sveltekit.head%
-	</head>
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content="Tiny app to show you the waveform for your voice" />
+    %sveltekit.head%
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1e1e2f; /* 深色背景 */
+            color: #ffffff; /* 白色文字 */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
 
-	<body data-sveltekit-preload-data="hover">
-		<div style="display: contents">%sveltekit.body%</div>
-	</body>
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background-color: #2a2a40; /* 浅深色容器背景 */
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #6c63ff; /* 紫色标题 */
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #d1d1d1; /* 浅灰色文字 */
+        }
+
+        button {
+            background-color: #6c63ff; /* 紫色按钮 */
+            color: #ffffff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #574fcc; /* 深紫色悬停效果 */
+        }
+
+        button:active {
+            background-color: #453d9f; /* 更深的紫色点击效果 */
+        }
+    </style>
+</head>
+<body data-sveltekit-preload-data="hover">
+    <div class="container">
+        <h1>Welcome to Our Waveform Application!</h1>
+        <p>Please click the button below to start recording your voice and see the waveform.</p>
+        <button onclick="startRecording()">Start Recording</button>
+    </div>
+    <div style="display: contents">%sveltekit.body%</div>
+
+    <script>
+        function startRecording() {
+            // 这里可以添加录音功能的逻辑
+            alert("Recording started! Speak into your microphone.");
+        }
+    </script>
+</body>
 </html>
